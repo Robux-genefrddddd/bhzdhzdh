@@ -226,6 +226,19 @@ export default function Chatbot() {
         ),
       );
 
+      if (user) {
+        try {
+          await PrivateMessageHistory.savePrivateMessage(
+            user.id,
+            user.email,
+            input,
+            data.content,
+          );
+        } catch (err) {
+          console.error("Failed to save private message:", err);
+        }
+      }
+
       await incrementMessageCount();
     } catch (error) {
       const errorMessage: Message = {
