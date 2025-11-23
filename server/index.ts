@@ -5,6 +5,11 @@ import { handleDemo } from "./routes/demo";
 import { handleChat } from "./routes/chat";
 import { handleSecurityCheck } from "./routes/security";
 import { handleCaptchaVerify } from "./routes/captcha";
+import {
+  handleLicenseVerify,
+  handleLicenseActivate,
+  handleIncrementMessageCount,
+} from "./routes/license";
 
 export function createServer() {
   const app = express();
@@ -30,6 +35,11 @@ export function createServer() {
 
   // Captcha verification route
   app.post("/api/captcha/verify", handleCaptchaVerify);
+
+  // License routes
+  app.post("/api/license/verify", handleLicenseVerify);
+  app.post("/api/license/activate", handleLicenseActivate);
+  app.post("/api/license/increment", handleIncrementMessageCount);
 
   return app;
 }
