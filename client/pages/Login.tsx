@@ -311,15 +311,6 @@ export default function Login() {
           }
         }
 
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-
         @keyframes shake {
           0%, 100% {
             transform: translateX(0);
