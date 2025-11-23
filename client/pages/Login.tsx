@@ -11,6 +11,8 @@ export default function Login() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const captchaRef = useRef<any>(null);
   const { login } = useAuth();
   const navigate = useNavigate();
 
