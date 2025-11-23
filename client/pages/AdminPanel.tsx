@@ -71,9 +71,15 @@ export default function AdminPanel() {
     "La plateforme est actuellement en maintenance. Veuillez réessayer plus tard.",
   );
 
+  // Message history states
+  const [messageHistory, setMessageHistory] = useState<any[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [loadingMessages, setLoadingMessages] = useState(false);
+
   useEffect(() => {
     const adminAuth = sessionStorage.getItem("admin_authenticated");
-    if (adminAuth !== "true") {
+    const token = sessionStorage.getItem("admin_token");
+    if (adminAuth !== "true" || !token) {
       navigate("/admin-login");
       return;
     }
@@ -84,7 +90,8 @@ export default function AdminPanel() {
   }, [navigate]);
 
   const adminAuth = sessionStorage.getItem("admin_authenticated");
-  if (adminAuth !== "true") {
+  const token = sessionStorage.getItem("admin_token");
+  if (adminAuth !== "true" || !token) {
     return null;
   }
 
