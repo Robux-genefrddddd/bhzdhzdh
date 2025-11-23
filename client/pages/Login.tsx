@@ -56,8 +56,24 @@ export default function Login() {
       return;
     }
 
+    if (!captchaToken) {
+      setError("Please complete the captcha verification");
+      return;
+    }
+
     try {
       setIsLoading(true);
+
+      const captchaVerification = await verifyCaptchaToken(captchaToken);
+      if (!captchaVerification.success) {
+        setError(captchaVerification.error || "Captcha verification failed");
+        if (captchaRef.current) {
+          captchaRef.current.reset();
+        }
+        setCaptchaToken("");
+        return;
+      }
+
       await login(formData.email, formData.password);
       navigate("/");
     } catch (err) {
