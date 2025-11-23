@@ -81,6 +81,7 @@ export default function Register() {
         );
         // on force à refaire le captcha
         setCaptchaToken(null);
+        hcaptchaRef.current?.resetCaptcha();
         return;
       }
 
