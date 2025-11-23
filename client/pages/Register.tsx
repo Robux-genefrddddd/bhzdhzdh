@@ -22,40 +22,40 @@ export default function Register() {
     setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setError("");
 
     if (!formData.name.trim()) {
       setError("Name is required");
-      setIsLoading(false);
       return;
     }
 
     if (!formData.email.trim()) {
       setError("Email is required");
-      setIsLoading(false);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       setError("Please enter a valid email");
-      setIsLoading(false);
       return;
     }
 
     if (!formData.password || formData.password.length < 6) {
       setError("Password must be at least 6 characters");
-      setIsLoading(false);
       return;
     }
 
-    // Simulate registration delay for animation effect
-    setTimeout(() => {
-      register(formData.name, formData.email, formData.password);
-      setIsLoading(false);
+    try {
+      setIsLoading(true);
+      await register(formData.name, formData.email, formData.password);
       navigate("/");
-    }, 600);
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "Registration failed";
+      setError(errorMsg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
