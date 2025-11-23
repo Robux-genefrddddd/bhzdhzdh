@@ -42,42 +42,56 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Listen to Firebase auth state changes
+    let isMounted = true;
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
+        if (!isMounted) return;
+
         if (firebaseUser) {
-          // User is logged in - fetch their profile from Firestore
-          const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUser({
-              id: firebaseUser.uid,
-              name: userData.name,
-              email: firebaseUser.email || "",
-              plan: userData.plan || "Gratuit",
-            });
-          } else {
-            // Fallback if user doc doesn't exist (shouldn't happen)
-            setUser({
-              id: firebaseUser.uid,
-              name: "",
-              email: firebaseUser.email || "",
-              plan: "Gratuit",
-            });
+          try {
+            const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+            if (!isMounted) return;
+
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              setUser({
+                id: firebaseUser.uid,
+                name: userData.name,
+                email: firebaseUser.email || "",
+                plan: userData.plan || "Gratuit",
+              });
+            } else {
+              setUser({
+                id: firebaseUser.uid,
+                name: "",
+                email: firebaseUser.email || "",
+                plan: "Gratuit",
+              });
+            }
+          } catch (docErr) {
+            if (!isMounted) return;
+            console.error("Error fetching user document:", docErr);
+            setError(docErr instanceof Error ? docErr.message : "Failed to load user profile");
           }
         } else {
-          // User is logged out
           setUser(null);
         }
       } catch (err) {
-        console.error("Error loading user:", err);
+        if (!isMounted) return;
+        console.error("Error in auth state change:", err);
         setError(err instanceof Error ? err.message : "Failed to load user");
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     });
 
-    return unsubscribe;
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, []);
 
   const register = async (
