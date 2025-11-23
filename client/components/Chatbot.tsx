@@ -292,33 +292,14 @@ export default function Chatbot() {
           </div>
         </div>
 
-        {/* Input Area */}
-        <div className="border-t border-gray-200 dark:border-gray-900 px-4 py-4 sm:px-8 bg-white dark:bg-black">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex gap-2 sm:gap-3">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="input-glass flex-1 px-4 py-3 resize-none"
-                rows={3}
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={!input.trim() || isLoading}
-                className="btn-glow px-3 sm:px-4 py-3 flex items-center justify-center gap-2 self-end flex-shrink-0"
-                title="Send message"
-              >
-                <Send size={18} />
-                <span className="hidden sm:inline text-sm">Send</span>
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-600 mt-2">
-              Press Enter to send, Shift+Enter for new line
-            </p>
-          </div>
-        </div>
+        {/* Input Area Component */}
+        <InputArea
+          value={input}
+          onChange={setInput}
+          onSend={handleSendMessage}
+          disabled={isLoading}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );
