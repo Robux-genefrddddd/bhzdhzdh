@@ -254,4 +254,10 @@ export const handleGetUsers: RequestHandler = async (req, res) => {
   }
 };
 
-export { aiConfig as getAIConfig, generatedLicenses as getLicenses };
+export function getAIConfig_() {
+  return aiConfig;
+}
+
+export function getLicenses_() {
+  return generatedLicenses;
+}
