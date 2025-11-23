@@ -7,8 +7,6 @@ import {
   formatLicenseKey,
 } from "../lib/licenseUtils";
 
-const ADMIN_EMAIL = "founder@example.com";
-
 // In-memory storage for generated licenses and AI config
 const generatedLicenses: Map<string, GeneratedLicense> = new Map();
 let aiConfig: AIConfig = {
@@ -18,18 +16,18 @@ let aiConfig: AIConfig = {
   maxTokens: 1024,
 };
 
-async function verifyAdmin(email?: string): Promise<boolean> {
-  return email === ADMIN_EMAIL;
+function verifyAdmin(req: any): boolean {
+  const adminAuth = req.headers["x-admin-auth"];
+  return adminAuth === "true";
 }
 
 export const handleCreateLicense: RequestHandler = async (req, res) => {
   try {
-    const { email, plan, durationDays } = req.body as AdminLicenseCreate;
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
+
+    const { email, plan, durationDays } = req.body as AdminLicenseCreate;
 
     if (!email || !plan || !durationDays) {
       return res.status(400).json({
@@ -57,6 +55,10 @@ export const handleCreateLicense: RequestHandler = async (req, res) => {
 
 export const handleUserAction: RequestHandler = async (req, res) => {
   try {
+    if (!verifyAdmin(req)) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
     const {
       email: userEmail,
       action,
@@ -66,11 +68,6 @@ export const handleUserAction: RequestHandler = async (req, res) => {
       email: string;
       durationDays?: number;
     };
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
 
     if (!userEmail || !action) {
       return res.status(400).json({
@@ -90,12 +87,11 @@ export const handleUserAction: RequestHandler = async (req, res) => {
 
 export const handleMaintenanceMode: RequestHandler = async (req, res) => {
   try {
-    const { enabled, message } = req.body;
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
+
+    const { enabled, message } = req.body;
 
     return res.json({
       success: true,
@@ -110,9 +106,7 @@ export const handleMaintenanceMode: RequestHandler = async (req, res) => {
 
 export const handleGetStats: RequestHandler = async (req, res) => {
   try {
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
@@ -129,12 +123,11 @@ export const handleGetStats: RequestHandler = async (req, res) => {
 
 export const handleCreateLicenseNoEmail: RequestHandler = async (req, res) => {
   try {
-    const { plan, durationDays } = req.body as { plan: LicensePlan; durationDays: number };
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
+
+    const { plan, durationDays } = req.body as { plan: LicensePlan; durationDays: number };
 
     if (!plan || !durationDays) {
       return res.status(400).json({
@@ -178,9 +171,7 @@ export const handleCreateLicenseNoEmail: RequestHandler = async (req, res) => {
 
 export const handleGetGeneratedLicenses: RequestHandler = async (req, res) => {
   try {
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
@@ -198,9 +189,7 @@ export const handleGetGeneratedLicenses: RequestHandler = async (req, res) => {
 
 export const handleGetAIConfig: RequestHandler = async (req, res) => {
   try {
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
@@ -216,12 +205,11 @@ export const handleGetAIConfig: RequestHandler = async (req, res) => {
 
 export const handleUpdateAIConfig: RequestHandler = async (req, res) => {
   try {
-    const config = req.body as AIConfig;
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
+
+    const config = req.body as AIConfig;
 
     if (!config.model || !config.systemPrompt) {
       return res.status(400).json({
@@ -248,9 +236,7 @@ export const handleUpdateAIConfig: RequestHandler = async (req, res) => {
 
 export const handleGetUsers: RequestHandler = async (req, res) => {
   try {
-    const adminEmail = req.headers["x-admin-email"] as string;
-
-    if (!(await verifyAdmin(adminEmail))) {
+    if (!verifyAdmin(req)) {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
