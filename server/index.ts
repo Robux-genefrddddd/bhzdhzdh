@@ -52,7 +52,7 @@ export function createServer() {
   app.post("/api/license/activate", handleLicenseActivate);
   app.post("/api/license/increment", handleIncrementMessageCount);
 
-  // Admin routes
+  // Admin routes (need auth header)
   app.post("/api/admin/license/create", handleCreateLicense);
   app.post("/api/admin/license/create-no-email", handleCreateLicenseNoEmail);
   app.get("/api/admin/licenses", handleGetGeneratedLicenses);
@@ -62,6 +62,12 @@ export function createServer() {
   app.get("/api/admin/stats", handleGetStats);
   app.get("/api/admin/ai-config", handleGetAIConfig);
   app.post("/api/admin/ai-config", handleUpdateAIConfig);
+
+  // Public routes (no auth needed)
+  app.get("/api/ai-config", (req, res) => {
+    const { getAIConfig } = require("./routes/admin");
+    res.json({ success: true, config: getAIConfig });
+  });
 
   return app;
 }
