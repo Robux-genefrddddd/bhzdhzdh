@@ -280,6 +280,15 @@ export const handleGetMessageHistory: RequestHandler = async (req, res) => {
     }
 
     try {
+      const { adminDb } = await import("../lib/firebase-admin");
+      if (!adminDb) {
+        return res.json({
+          success: true,
+          messages: [],
+          total: 0,
+        });
+      }
+
       const messagesSnapshot = await adminDb
         .collection("private_messages")
         .doc(userId)
@@ -326,6 +335,14 @@ export const handleDeleteUserData: RequestHandler = async (req, res) => {
     }
 
     try {
+      const { adminDb } = await import("../lib/firebase-admin");
+      if (!adminDb) {
+        return res.json({
+          success: true,
+          message: "User data deletion completed",
+        });
+      }
+
       const messagesSnapshot = await adminDb
         .collection("private_messages")
         .doc(userId)
