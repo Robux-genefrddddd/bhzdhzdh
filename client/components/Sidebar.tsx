@@ -104,7 +104,10 @@ export default function Sidebar({
 
       {/* Middle Section - Conversations List */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
-        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-3">
+        <h3
+          className="text-xs font-semibold uppercase tracking-wider px-2 mb-3"
+          style={{ color: "#666666" }}
+        >
           Conversations
         </h3>
         <div className="space-y-2">
@@ -112,26 +115,39 @@ export default function Sidebar({
             conversations.map((conv) => (
               <div
                 key={conv.id}
-                className={`group relative flex items-start gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
+                className="group relative flex items-start gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200"
+                style={
                   activeConversationId === conv.id
-                    ? "bg-blue-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/20"
-                    : "hover:backdrop-blur-md hover:bg-white/10 dark:hover:bg-white/8"
-                }`}
+                    ? {
+                        backgroundColor: "rgba(10, 132, 255, 0.15)",
+                        border: "1px solid #0A84FF",
+                        boxShadow: "0 0 12px rgba(10, 132, 255, 0.2)",
+                      }
+                    : {
+                        border: "1px solid transparent",
+                      }
+                }
                 onClick={() => onSelectConversation(conv.id)}
               >
                 <Clock
                   size={16}
-                  className={`flex-shrink-0 mt-1 ${
-                    activeConversationId === conv.id
-                      ? "text-blue-400"
-                      : "text-gray-500"
-                  }`}
+                  className="flex-shrink-0 mt-1"
+                  style={{
+                    color:
+                      activeConversationId === conv.id ? "#0A84FF" : "#666666",
+                  }}
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white truncate font-medium">
+                  <p
+                    className="text-sm truncate font-medium"
+                    style={{ color: "#FFFFFF" }}
+                  >
                     {conv.title}
                   </p>
-                  <p className="text-xs text-gray-600">
+                  <p
+                    className="text-xs"
+                    style={{ color: "#666666" }}
+                  >
                     {formatTimestamp(conv.timestamp)}
                   </p>
                 </div>
@@ -140,15 +156,24 @@ export default function Sidebar({
                     e.stopPropagation();
                     onDeleteConversation(conv.id);
                   }}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-red-500/20 rounded-md"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 rounded-md"
                   title="Delete conversation"
+                  style={{
+                    backgroundColor: "rgba(239, 68, 68, 0.1)",
+                    color: "#EF4444",
+                  }}
                 >
-                  <Trash2 size={16} className="text-red-500" />
+                  <Trash2 size={16} />
                 </button>
               </div>
             ))
           ) : (
-            <p className="text-sm text-gray-600 px-2">No conversations yet</p>
+            <p
+              className="text-sm px-2"
+              style={{ color: "#666666" }}
+            >
+              No conversations yet
+            </p>
           )}
         </div>
       </div>
