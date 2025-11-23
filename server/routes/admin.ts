@@ -14,7 +14,6 @@ import {
   formatLicenseKey,
 } from "../lib/licenseUtils";
 import { verifyAdminToken } from "../lib/adminAuth";
-import { adminDb } from "../lib/firebase-admin";
 
 const generatedLicenses: Map<string, GeneratedLicense> = new Map();
 let aiConfig: AIConfig = {
