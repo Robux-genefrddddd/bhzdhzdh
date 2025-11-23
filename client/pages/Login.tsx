@@ -71,18 +71,18 @@ export default function Login() {
     >
       {/* Starfield Background */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(100)].map((_, i) => (
+        {stars.map((star, i) => (
           <div
             key={i}
             className="absolute rounded-full bg-white"
             style={{
-              width: Math.random() * 3 + 1 + "px",
-              height: Math.random() * 3 + 1 + "px",
-              left: Math.random() * 100 + "%",
-              top: Math.random() * 100 + "%",
-              opacity: Math.random() * 0.7 + 0.3,
-              animation: `shootingStar ${Math.random() * 3 + 2}s infinite`,
-              animationDelay: Math.random() * 5 + "s",
+              width: star.width + "px",
+              height: star.height + "px",
+              left: star.left + "%",
+              top: star.top + "%",
+              opacity: star.opacity,
+              animation: `shootingStar ${star.duration}s infinite`,
+              animationDelay: star.delay + "s",
             }}
           />
         ))}
