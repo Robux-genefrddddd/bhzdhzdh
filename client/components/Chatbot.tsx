@@ -85,6 +85,24 @@ export default function Chatbot() {
   const handleSendMessage = async () => {
     if (!input.trim() || !activeConversation) return;
 
+    if (!canSendMessage()) {
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        content: `You have reached your message limit (100 messages) on the Free plan. Upgrade to continue.`,
+        sender: "assistant",
+        timestamp: new Date(),
+      };
+
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv.id === activeConversationId
+            ? { ...conv, messages: [...conv.messages, errorMessage] }
+            : conv,
+        ),
+      );
+      return;
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       content: input,
