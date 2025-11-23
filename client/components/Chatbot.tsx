@@ -68,7 +68,7 @@ export default function Chatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConversation = conversations.find(
-    (conv) => conv.id === activeConversationId
+    (conv) => conv.id === activeConversationId,
   );
   const messages = activeConversation?.messages || [];
 
@@ -120,8 +120,8 @@ export default function Chatbot() {
       prev.map((conv) =>
         conv.id === activeConversationId
           ? { ...conv, messages: [...conv.messages, userMessage] }
-          : conv
-      )
+          : conv,
+      ),
     );
     setInput("");
     setIsLoading(true);
@@ -138,8 +138,8 @@ export default function Chatbot() {
         prev.map((conv) =>
           conv.id === activeConversationId
             ? { ...conv, messages: [...conv.messages, assistantMessage] }
-            : conv
-        )
+            : conv,
+        ),
       );
       setIsLoading(false);
     }, 800);
@@ -176,7 +176,6 @@ export default function Chatbot() {
     setActiveConversationId(id);
   };
 
-
   return (
     <div className="flex h-screen bg-white dark:bg-[#0a0a0a]">
       {/* Fixed Sidebar */}
@@ -202,18 +201,12 @@ export default function Chatbot() {
           {/* Right: Action Buttons */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Quick Action Button */}
-            <button
-              className="btn-icon-glass"
-              title="New chat"
-            >
+            <button className="btn-icon-glass" title="New chat">
               <Plus size={20} className="text-black dark:text-white" />
             </button>
 
             {/* User Profile Button */}
-            <button
-              className="btn-icon-glass"
-              title="User profile"
-            >
+            <button className="btn-icon-glass" title="User profile">
               <User size={20} className="text-black dark:text-white" />
             </button>
 

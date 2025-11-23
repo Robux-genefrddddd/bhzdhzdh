@@ -23,10 +23,8 @@ export default function InputArea({
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = Math.min(
-        textareaRef.current.scrollHeight,
-        120
-      ) + "px";
+      textareaRef.current.style.height =
+        Math.min(textareaRef.current.scrollHeight, 120) + "px";
     }
   }, [value]);
 
@@ -42,9 +40,7 @@ export default function InputArea({
       <div className="max-w-4xl mx-auto">
         <div
           className={`rounded-2xl transition-all duration-300 ${
-            isFocused
-              ? "shadow-lg"
-              : "shadow-md"
+            isFocused ? "shadow-lg" : "shadow-md"
           }`}
           style={{
             backgroundColor: "#111111",
@@ -97,12 +93,14 @@ export default function InputArea({
               disabled={!value.trim() || disabled || isLoading}
               className="flex-shrink-0 p-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                backgroundColor: !value.trim() || disabled || isLoading
-                  ? "rgba(10, 132, 255, 0.3)"
-                  : "rgba(10, 132, 255, 0.8)",
-                boxShadow: !value.trim() || disabled || isLoading
-                  ? "none"
-                  : "0 0 15px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                backgroundColor:
+                  !value.trim() || disabled || isLoading
+                    ? "rgba(10, 132, 255, 0.3)"
+                    : "rgba(10, 132, 255, 0.8)",
+                boxShadow:
+                  !value.trim() || disabled || isLoading
+                    ? "none"
+                    : "0 0 15px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
               }}
               onMouseEnter={(e) => {
                 if (!(!value.trim() || disabled || isLoading)) {

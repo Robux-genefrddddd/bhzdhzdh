@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Plus,
-  LogOut,
-  Trash2,
-  Clock,
-  User,
-} from "lucide-react";
+import { Plus, LogOut, Trash2, Clock, User } from "lucide-react";
 
 interface Conversation {
   id: string;
@@ -117,9 +111,7 @@ export default function Sidebar({
               </div>
             ))
           ) : (
-            <p className="text-sm text-gray-600 px-2">
-              No conversations yet
-            </p>
+            <p className="text-sm text-gray-600 px-2">No conversations yet</p>
           )}
         </div>
       </div>
@@ -135,14 +127,14 @@ export default function Sidebar({
         >
           {/* Content - Centered */}
           <div className="text-center">
-            <span className="text-xs font-semibold text-gray-300">Plan: Gratuit</span>
+            <span className="text-xs font-semibold text-gray-300">
+              Plan: Gratuit
+            </span>
           </div>
         </div>
 
         {/* Logout Button */}
-        <button
-          className="w-full mt-3 flex items-center gap-3 px-4 py-2.5 text-left text-red-500 hover:bg-red-500/10 rounded-lg transition-colors duration-200 text-sm"
-        >
+        <button className="w-full mt-3 flex items-center gap-3 px-4 py-2.5 text-left text-red-500 hover:bg-red-500/10 rounded-lg transition-colors duration-200 text-sm">
           <LogOut size={18} />
           <span className="font-medium">Déconnexion</span>
         </button>

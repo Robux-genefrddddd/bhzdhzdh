@@ -163,7 +163,10 @@ export default function Menu({ isDark, onThemeToggle }: MenuProps) {
                     key={conv.id}
                     className="group relative flex items-start gap-3 px-3 py-2 rounded-lg hover:backdrop-blur-md hover:bg-white/10 dark:hover:bg-white/8 transition-all duration-200 cursor-pointer"
                   >
-                    <Clock size={16} className="text-gray-400 dark:text-gray-600 flex-shrink-0 mt-1" />
+                    <Clock
+                      size={16}
+                      className="text-gray-400 dark:text-gray-600 flex-shrink-0 mt-1"
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-black dark:text-white truncate font-medium">
                         {conv.title}
@@ -180,7 +183,10 @@ export default function Menu({ isDark, onThemeToggle }: MenuProps) {
                       className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-md"
                       title="Delete conversation"
                     >
-                      <Trash2 size={16} className="text-red-600 dark:text-red-500" />
+                      <Trash2
+                        size={16}
+                        className="text-red-600 dark:text-red-500"
+                      />
                     </button>
                   </div>
                 ))
