@@ -12,7 +12,11 @@ export default function Register() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState("");
+
+  // null = pas encore validé / expiré
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [isCaptchaReady, setIsCaptchaReady] = useState(false);
+
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -71,8 +75,11 @@ export default function Register() {
 
       const captchaVerification = await verifyCaptchaToken(captchaToken);
       if (!captchaVerification.success) {
-        setError(captchaVerification.error || "Captcha verification failed");
-        setCaptchaToken("");
+        setError(
+          captchaVerification.error || "Captcha verification failed",
+        );
+        // on force à refaire le captcha
+        setCaptchaToken(null);
         return;
       }
 
@@ -297,36 +304,51 @@ export default function Register() {
 
               {/* Cloudflare Turnstile */}
               <div
-                className="flex justify-center"
+                className="flex flex-col items-center gap-2"
                 style={{
                   animation: "fadeInUp 0.6s ease-out 0.55s both",
                 }}
               >
                 <Turnstile
                   sitekey={getSiteKey()}
-                  onVerify={(token) => setCaptchaToken(token)}
+                  onVerify={(token) => {
+                    setCaptchaToken(token);
+                    setError("");
+                  }}
                   onError={() => {
                     setError("Captcha verification failed. Please try again.");
-                    setCaptchaToken("");
+                    setCaptchaToken(null);
                   }}
-                  onExpire={() => setCaptchaToken("")}
+                  onExpire={() => {
+                    setCaptchaToken(null);
+                    setError(
+                      "Le captcha a expiré, veuillez le valider à nouveau.",
+                    );
+                  }}
                   theme="dark"
                   language="fr"
+                  onLoad={() => setIsCaptchaReady(true)}
                 />
+
+                {!isCaptchaReady && (
+                  <span className="text-xs" style={{ color: "#AAAAAA" }}>
+                    Chargement du captcha…
+                  </span>
+                )}
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isLoading}
-                className="w-full py-3 rounded-lg font-semibold transition-all duration-200 text-white mt-6 relative overflow-hidden group disabled:opacity-50"
+                disabled={isLoading || !captchaToken}
+                className="w-full py-3 rounded-lg font-semibold transition-all duration-200 text-white mt-6 relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   backgroundColor: "#0A84FF",
                   boxShadow: "0 0 20px rgba(10, 132, 255, 0.4)",
                   animation: "fadeInUp 0.6s ease-out 0.6s both",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isLoading) {
+                  if (!isLoading && captchaToken) {
                     (e.currentTarget as HTMLElement).style.boxShadow =
                       "0 0 30px rgba(10, 132, 255, 0.6)";
                     (e.currentTarget as HTMLElement).style.backgroundColor =
@@ -334,7 +356,7 @@ export default function Register() {
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (!isLoading) {
+                  if (!isLoading && captchaToken) {
                     (e.currentTarget as HTMLElement).style.boxShadow =
                       "0 0 20px rgba(10, 132, 255, 0.4)";
                     (e.currentTarget as HTMLElement).style.backgroundColor =
