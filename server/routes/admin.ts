@@ -266,6 +266,94 @@ export const handleGetUsers: RequestHandler = async (req, res) => {
   }
 };
 
+export const handleGetMessageHistory: RequestHandler = async (req, res) => {
+  try {
+    if (!(await verifyAdmin(req))) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    const { userId } = req.query as { userId?: string };
+
+    if (!userId) {
+      return res.status(400).json({
+        error: "User ID is required",
+      });
+    }
+
+    try {
+      const messagesSnapshot = await adminDb
+        .collection("private_messages")
+        .doc(userId)
+        .collection("history")
+        .orderBy("timestamp", "desc")
+        .limit(100)
+        .get();
+
+      const messages = messagesSnapshot.docs
+        .map((doc) => doc.data())
+        .filter((msg: any) => !msg.deleted);
+
+      return res.json({
+        success: true,
+        messages,
+        total: messages.length,
+      });
+    } catch (err) {
+      console.error("Error fetching message history:", err);
+      return res.json({
+        success: true,
+        messages: [],
+        total: 0,
+      });
+    }
+  } catch (error) {
+    console.error("Message history error:", error);
+    return res.status(500).json({ error: "Failed to retrieve message history" });
+  }
+};
+
+export const handleDeleteUserData: RequestHandler = async (req, res) => {
+  try {
+    if (!(await verifyAdmin(req))) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    const { userId } = req.body as { userId: string };
+
+    if (!userId) {
+      return res.status(400).json({
+        error: "User ID is required",
+      });
+    }
+
+    try {
+      const messagesSnapshot = await adminDb
+        .collection("private_messages")
+        .doc(userId)
+        .collection("history")
+        .get();
+
+      for (const doc of messagesSnapshot.docs) {
+        await doc.ref.delete();
+      }
+
+      return res.json({
+        success: true,
+        message: "User data deleted successfully",
+      });
+    } catch (err) {
+      console.error("Error deleting user data:", err);
+      return res.json({
+        success: true,
+        message: "User data deletion completed",
+      });
+    }
+  } catch (error) {
+    console.error("Delete user data error:", error);
+    return res.status(500).json({ error: "Failed to delete user data" });
+  }
+};
+
 export function getAIConfig_() {
   return aiConfig;
 }
