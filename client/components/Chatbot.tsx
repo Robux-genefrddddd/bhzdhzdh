@@ -225,6 +225,14 @@ export default function Chatbot() {
     }
   };
 
+  const handleRenameConversation = (id: string, newTitle: string) => {
+    setConversations((prev) =>
+      prev.map((conv) =>
+        conv.id === id ? { ...conv, title: newTitle } : conv,
+      ),
+    );
+  };
+
   const handleSelectConversation = (id: string) => {
     setActiveConversationId(id);
   };
