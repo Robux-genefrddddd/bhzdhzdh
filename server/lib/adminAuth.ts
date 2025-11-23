@@ -1,4 +1,4 @@
-import { getAuth } from "firebase-admin/auth";
+import { adminAuth } from "./firebase-admin";
 import { Request } from "express";
 
 export async function verifyAdminToken(req: Request): Promise<{
@@ -7,14 +7,19 @@ export async function verifyAdminToken(req: Request): Promise<{
   email?: string;
 }> {
   try {
+    if (!adminAuth) {
+      console.warn("Firebase Admin Auth not initialized");
+      return { isAdmin: false };
+    }
+
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return { isAdmin: false };
     }
 
     const token = authHeader.substring(7);
-    const decodedToken = await getAuth().verifyIdToken(token);
-    
+    const decodedToken = await adminAuth.verifyIdToken(token);
+
     const customClaims = decodedToken.customClaims || {};
     const isAdmin = customClaims.admin === true;
 
