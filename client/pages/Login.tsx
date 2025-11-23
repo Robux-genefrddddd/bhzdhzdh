@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Turnstile from "react-turnstile";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { getSiteKey, verifyCaptchaToken } from "@/lib/turnstile";
 
 export default function Login() {
@@ -15,6 +15,7 @@ export default function Login() {
   // null = pas encore validé / expiré
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isCaptchaReady, setIsCaptchaReady] = useState(false);
+  const hcaptchaRef = useRef<HCaptcha>(null);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ export default function Login() {
         );
         // on force l'utilisateur à refaire le captcha
         setCaptchaToken(null);
+        hcaptchaRef.current?.resetCaptcha();
         return;
       }
 
@@ -261,17 +263,17 @@ export default function Login() {
                 </div>
               )}
 
-              {/* Cloudflare Turnstile */}
+              {/* hCaptcha */}
               <div
                 className="flex flex-col items-center gap-2"
                 style={{
                   animation: "fadeInUp 0.6s ease-out 0.45s both",
                 }}
               >
-                <Turnstile
+                <HCaptcha
+                  ref={hcaptchaRef}
                   sitekey={getSiteKey()}
                   onVerify={(token) => {
-                    // Turnstile peut résoudre tout seul → ce callback est fiable
                     setCaptchaToken(token);
                     setError("");
                   }}
