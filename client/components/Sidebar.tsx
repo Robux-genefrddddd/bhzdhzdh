@@ -24,6 +24,14 @@ export default function Sidebar({
   onNewConversation,
   onDeleteConversation,
 }: SidebarProps) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/register");
+  };
+
   const formatTimestamp = (date: Date): string => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -39,28 +47,55 @@ export default function Sidebar({
   };
 
   return (
-    <div className="hidden lg:flex w-[280px] h-screen flex-col bg-black border-r border-gray-900 shadow-2xl">
+    <div
+      className="hidden lg:flex w-[280px] h-screen flex-col border-r shadow-2xl"
+      style={{
+        backgroundColor: "#101010",
+        borderColor: "#1A1A1A",
+      }}
+    >
       {/* Header Section - User Profile */}
-      <div className="px-6 py-6 border-b border-gray-900">
+      <div
+        className="px-6 py-6 border-b"
+        style={{ borderColor: "#1A1A1A" }}
+      >
         <div className="flex items-center gap-4">
           {/* Avatar */}
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center shadow-inner border border-gray-700">
-            <span className="text-white font-bold text-lg">U</span>
+          <div
+            className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+            style={{
+              backgroundColor: "#1A1A1A",
+            }}
+          >
+            <UserCircle size={28} style={{ color: "#888888" }} />
           </div>
 
           {/* User Info */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white truncate">
-              Utilisateur
+            <p
+              className="text-sm font-semibold truncate"
+              style={{ color: "#FFFFFF" }}
+            >
+              {user?.name || "User"}
             </p>
-            <p className="text-xs text-gray-500">Account</p>
+            <p
+              className="text-xs"
+              style={{ color: "#666666" }}
+            >
+              {user?.email || "Account"}
+            </p>
           </div>
         </div>
 
         {/* New Conversation Button */}
         <button
           onClick={onNewConversation}
-          className="btn-glow w-full mt-4 flex items-center justify-center gap-2 px-4 py-3 text-sm"
+          className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-lg transition-all duration-200 font-semibold"
+          style={{
+            backgroundColor: "#0A84FF",
+            color: "#FFFFFF",
+            boxShadow: "0 0 15px rgba(10, 132, 255, 0.3)",
+          }}
         >
           <Plus size={18} />
           Nouvelle Conversation
