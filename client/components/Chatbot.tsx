@@ -19,49 +19,21 @@ interface Conversation {
 }
 
 export default function Chatbot() {
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: "1",
-      title: "How to learn React",
-      timestamp: new Date(Date.now() - 3600000),
-      messages: [
-        {
-          id: "1",
-          content: "Hello! I'm your AI assistant. How can I help you today?",
-          sender: "assistant",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "2",
-      title: "JavaScript best practices",
-      timestamp: new Date(Date.now() - 86400000),
-      messages: [
-        {
-          id: "1",
-          content: "Let's discuss JavaScript best practices.",
-          sender: "assistant",
-          timestamp: new Date(),
-        },
-      ],
-    },
-    {
-      id: "3",
-      title: "Web development tips",
-      timestamp: new Date(Date.now() - 172800000),
-      messages: [
-        {
-          id: "1",
-          content: "Here are some useful web development tips.",
-          sender: "assistant",
-          timestamp: new Date(),
-        },
-      ],
-    },
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>(() => {
+    const newId = Date.now().toString();
+    return [
+      {
+        id: newId,
+        title: "New Conversation",
+        timestamp: new Date(),
+        messages: [],
+      },
+    ];
+  });
 
-  const [activeConversationId, setActiveConversationId] = useState<string>("1");
+  const [activeConversationId, setActiveConversationId] = useState<string>(() =>
+    conversations[0]?.id || Date.now().toString(),
+  );
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDark, setIsDark] = useState(false);
