@@ -15,6 +15,11 @@ import {
   handleUserAction,
   handleMaintenanceMode,
   handleGetStats,
+  handleCreateLicenseNoEmail,
+  handleGetGeneratedLicenses,
+  handleGetAIConfig,
+  handleUpdateAIConfig,
+  handleGetUsers,
 } from "./routes/admin";
 
 export function createServer() {
