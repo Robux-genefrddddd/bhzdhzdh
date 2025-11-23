@@ -102,6 +102,10 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    localStorage.setItem("conversations", JSON.stringify(conversations));
+  }, [conversations]);
+
   const handleSendMessage = async () => {
     if (!input.trim() || !activeConversation) return;
 
