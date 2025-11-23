@@ -64,6 +64,7 @@ const AppRoutes = () => {
   const { warnings, alerts, maintenanceMode, user, verifyLicense } = useAuth();
   const [showLicenseModal, setShowLicenseModal] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const isAdmin = user?.email === "founder@example.com" || user?.email === "jo.m.efarit.1.4@gmail.com";
 
   useEffect(() => {
     AntiBypass.initializeAllProtections();
@@ -71,7 +72,9 @@ const AppRoutes = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === "F1") {
         e.preventDefault();
-        setShowAdminPanel(true);
+        if (isAdmin) {
+          setShowAdminPanel(true);
+        }
       }
     };
 
@@ -87,9 +90,9 @@ const AppRoutes = () => {
       window.removeEventListener("keydown", handleKeyDown);
       clearInterval(licenseCheckInterval);
     };
-  }, [user, verifyLicense]);
+  }, [user, verifyLicense, isAdmin]);
 
-  if (showAdminPanel && user?.email === "founder@example.com") {
+  if (showAdminPanel && isAdmin) {
     return (
       <div>
         <AdminPanel />
