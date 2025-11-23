@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Paperclip, Smile, Mic } from "lucide-react";
+import { Send, Paperclip, Smile } from "lucide-react";
 
 interface InputAreaProps {
   value: string;
@@ -36,21 +36,28 @@ export default function InputArea({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 lg:left-[280px] bg-black dark:bg-black border-t border-gray-900 px-4 py-4 sm:px-6 md:px-8">
+    <div
+      className="fixed bottom-0 left-0 right-0 lg:left-[280px] border-t px-4 py-6 sm:px-6 md:px-8"
+      style={{
+        backgroundColor: "#000000",
+        borderColor: "#1A1A1A",
+      }}
+    >
       <div className="max-w-4xl mx-auto">
         <div
-          className={`rounded-2xl transition-all duration-300 ${
+          className={`transition-all duration-300 ${
             isFocused ? "shadow-lg" : "shadow-md"
           }`}
           style={{
-            backgroundColor: "#111111",
+            backgroundColor: "#0D0D0D",
             border: "1px solid #2A2A2A",
+            borderRadius: "24px",
             boxShadow: isFocused
               ? "0 0 20px #0A84FF40, 0 4px 20px rgba(0, 0, 0, 0.5)"
               : "0 4px 20px rgba(0, 0, 0, 0.3)",
           }}
         >
-          <div className="flex items-end gap-3 px-5 py-4">
+          <div className="flex items-center gap-4 px-6 py-5">
             {/* Left Icons */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <button
@@ -126,7 +133,10 @@ export default function InputArea({
         </div>
 
         {/* Helper Text */}
-        <p className="text-xs text-gray-600 mt-2 px-4">
+        <p
+          className="text-xs mt-3 px-4"
+          style={{ color: "#666666" }}
+        >
           Press Enter to send, Shift+Enter for new line
         </p>
       </div>
