@@ -37,5 +37,14 @@ export const verifyCaptchaToken = async (
 };
 
 export const getSiteKey = (): string => {
-  return import.meta.env.VITE_HCAPTCHA_SITE_KEY || "";
+  const siteKey = import.meta.env.VITE_HCAPTCHA_SITE_KEY;
+
+  if (!siteKey) {
+    console.warn(
+      "[hCaptcha] Warning: VITE_HCAPTCHA_SITE_KEY environment variable is not set. " +
+        "hCaptcha widget will not render. Make sure your .env file includes VITE_HCAPTCHA_SITE_KEY."
+    );
+  }
+
+  return siteKey || "";
 };

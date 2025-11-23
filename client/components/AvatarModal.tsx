@@ -60,27 +60,13 @@ const COMMON_EMOJIS = [
 
 export default function AvatarModal({ isOpen, onClose }: AvatarModalProps) {
   const { user, updateAvatar } = useAuth();
-  const [selectedEmoji, setSelectedEmoji] = useState(user?.avatar || "👤");
   const [imageUrl, setImageUrl] = useState("");
   const [fileName, setFileName] = useState("");
-  const [activeTab, setActiveTab] = useState<"emoji" | "url" | "upload">(
-    user?.avatarType === "emoji"
-      ? "emoji"
-      : user?.avatarType === "url"
-        ? "url"
-        : "emoji",
+  const [activeTab, setActiveTab] = useState<"url" | "upload">(
+    user?.avatarType === "url" ? "url" : "upload",
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleEmojiSelect = async (emoji: string) => {
-    setSelectedEmoji(emoji);
-    setIsLoading(true);
-    try {
-      await updateAvatar(emoji, "emoji");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleUrlSubmit = async () => {
     if (!imageUrl.trim()) return;
@@ -143,15 +129,14 @@ export default function AvatarModal({ isOpen, onClose }: AvatarModalProps) {
         {/* Avatar Preview */}
         <div className="flex justify-center mb-8">
           <div
-            className="w-24 h-24 rounded-full flex items-center justify-center text-5xl border-2"
+            className="w-24 h-24 rounded-full flex items-center justify-center border-2"
             style={{
               backgroundColor: "#1A1A1A",
               borderColor: "#0A84FF",
               boxShadow: "0 0 20px rgba(10, 132, 255, 0.3)",
             }}
           >
-            {activeTab === "emoji" && selectedEmoji}
-            {(activeTab === "url" || activeTab === "upload") && imageUrl && (
+            {imageUrl && (
               <img
                 src={imageUrl}
                 alt="preview"
@@ -166,7 +151,7 @@ export default function AvatarModal({ isOpen, onClose }: AvatarModalProps) {
           className="flex gap-2 mb-6 border-b"
           style={{ borderColor: "#1A1A1A" }}
         >
-          {(["emoji", "url", "upload"] as const).map((tab) => (
+          {(["url", "upload"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -176,37 +161,11 @@ export default function AvatarModal({ isOpen, onClose }: AvatarModalProps) {
                   : "border-transparent text-gray-500 hover:text-gray-300"
               }`}
             >
-              {tab === "emoji" && "Emoji"}
               {tab === "url" && "URL"}
               {tab === "upload" && "Upload"}
             </button>
           ))}
         </div>
-
-        {/* Emoji Tab */}
-        {activeTab === "emoji" && (
-          <div className="grid grid-cols-6 gap-2 mb-6">
-            {COMMON_EMOJIS.map((emoji) => (
-              <button
-                key={emoji}
-                onClick={() => handleEmojiSelect(emoji)}
-                className="text-3xl p-2 rounded-lg hover:bg-white/10 transition-colors"
-                style={{
-                  backgroundColor:
-                    selectedEmoji === emoji
-                      ? "rgba(10, 132, 255, 0.2)"
-                      : "transparent",
-                  border:
-                    selectedEmoji === emoji
-                      ? "2px solid #0A84FF"
-                      : "2px solid transparent",
-                }}
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
-        )}
 
         {/* URL Tab */}
         {activeTab === "url" && (
