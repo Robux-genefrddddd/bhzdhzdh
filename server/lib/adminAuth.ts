@@ -35,7 +35,8 @@ export async function verifyAdminToken(req: Request): Promise<{
 
 export async function isAdminUser(uid: string): Promise<boolean> {
   try {
-    const userRecord = await getAuth().getUser(uid);
+    if (!adminAuth) return false;
+    const userRecord = await adminAuth.getUser(uid);
     const customClaims = userRecord.customClaims || {};
     return customClaims.admin === true;
   } catch (err) {
@@ -45,7 +46,8 @@ export async function isAdminUser(uid: string): Promise<boolean> {
 
 export async function setAdminRole(uid: string): Promise<void> {
   try {
-    await getAuth().setCustomUserClaims(uid, { admin: true });
+    if (!adminAuth) throw new Error("Firebase Admin Auth not initialized");
+    await adminAuth.setCustomUserClaims(uid, { admin: true });
   } catch (err) {
     console.error("Error setting admin role:", err);
     throw err;
@@ -54,7 +56,8 @@ export async function setAdminRole(uid: string): Promise<void> {
 
 export async function removeAdminRole(uid: string): Promise<void> {
   try {
-    await getAuth().setCustomUserClaims(uid, { admin: false });
+    if (!adminAuth) throw new Error("Firebase Admin Auth not initialized");
+    await adminAuth.setCustomUserClaims(uid, { admin: false });
   } catch (err) {
     console.error("Error removing admin role:", err);
     throw err;
