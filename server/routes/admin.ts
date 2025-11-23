@@ -32,7 +32,7 @@ async function verifyAdmin(req: any): Promise<boolean> {
 
 export const handleCreateLicense: RequestHandler = async (req, res) => {
   try {
-    if (!verifyAdmin(req)) {
+    if (!(await verifyAdmin(req))) {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
