@@ -7,7 +7,16 @@ import {
   HelpCircle,
   LogOut,
   Menu as MenuIcon,
+  Plus,
+  Trash2,
+  Clock,
 } from "lucide-react";
+
+interface Conversation {
+  id: string;
+  title: string;
+  timestamp: Date;
+}
 
 interface MenuProps {
   isDark: boolean;
@@ -16,6 +25,23 @@ interface MenuProps {
 
 export default function Menu({ isDark, onThemeToggle }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [conversations, setConversations] = useState<Conversation[]>([
+    {
+      id: "1",
+      title: "How to learn React",
+      timestamp: new Date(Date.now() - 3600000),
+    },
+    {
+      id: "2",
+      title: "JavaScript best practices",
+      timestamp: new Date(Date.now() - 86400000),
+    },
+    {
+      id: "3",
+      title: "Web development tips",
+      timestamp: new Date(Date.now() - 172800000),
+    },
+  ]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
