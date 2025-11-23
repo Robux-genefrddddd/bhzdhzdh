@@ -235,7 +235,7 @@ export default function Chatbot() {
         </div>
 
         {/* Messages Container */}
-        <div className="flex-1 overflow-y-auto px-4 py-8 sm:px-8 bg-white dark:bg-black">
+        <div className="flex-1 overflow-y-auto px-4 py-8 sm:px-8 bg-white dark:bg-black pb-32">
           <div className="max-w-4xl mx-auto space-y-6">
             {messages.map((message) => (
               <div
