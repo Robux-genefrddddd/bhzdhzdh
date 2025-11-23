@@ -163,12 +163,24 @@ export default function Chatbot() {
         }),
       });
 
+      const responseText = await response.text();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to get response from AI");
+        let errorData;
+        try {
+          errorData = JSON.parse(responseText);
+          throw new Error(errorData.error || "Failed to get response from AI");
+        } catch (parseError) {
+          throw new Error(`Failed to get response from AI: ${response.statusText}`);
+        }
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        throw new Error("Failed to parse AI response");
+      }
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: data.content,
