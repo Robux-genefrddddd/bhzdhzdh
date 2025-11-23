@@ -69,13 +69,13 @@ export default function AdminPanel() {
       return;
     }
 
-    if (user.email !== ADMIN_EMAIL) {
+    if (!ADMIN_EMAILS.includes(user.email)) {
       navigate("/");
       return;
     }
   }, [user, navigate]);
 
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user || !ADMIN_EMAILS.includes(user.email)) {
     return null;
   }
 
