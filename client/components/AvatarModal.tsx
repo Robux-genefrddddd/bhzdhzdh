@@ -7,57 +7,6 @@ interface AvatarModalProps {
   onClose: () => void;
 }
 
-const COMMON_EMOJIS = [
-  "😀",
-  "😃",
-  "😄",
-  "😁",
-  "😆",
-  "😅",
-  "🤣",
-  "😂",
-  "🙂",
-  "🙃",
-  "😉",
-  "😊",
-  "😇",
-  "🥰",
-  "😍",
-  "🤩",
-  "😘",
-  "😗",
-  "😚",
-  "😙",
-  "🥲",
-  "😋",
-  "😛",
-  "😜",
-  "🤪",
-  "😌",
-  "😔",
-  "😑",
-  "😐",
-  "😏",
-  "🥣",
-  "😒",
-  "🐱",
-  "🐶",
-  "🦁",
-  "🐯",
-  "🐻",
-  "��",
-  "🐨",
-  "🐵",
-  "🎭",
-  "🎪",
-  "🎨",
-  "🎬",
-  "🎤",
-  "🎧",
-  "🎮",
-  "🏆",
-];
-
 export default function AvatarModal({ isOpen, onClose }: AvatarModalProps) {
   const { user, updateAvatar } = useAuth();
   const [imageUrl, setImageUrl] = useState("");
@@ -66,7 +15,6 @@ export default function AvatarModal({ isOpen, onClose }: AvatarModalProps) {
     user?.avatarType === "url" ? "url" : "upload",
   );
   const [isLoading, setIsLoading] = useState(false);
-
 
   const handleUrlSubmit = async () => {
     if (!imageUrl.trim()) return;
