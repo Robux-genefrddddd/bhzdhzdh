@@ -92,13 +92,16 @@ export default function Chatbot() {
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-[#0a0a0a]">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-900 px-6 py-4 sm:px-8 bg-white dark:bg-black">
-        <h1 className="text-2xl sm:text-3xl font-bold text-black dark:text-white">
-          Chat
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-500 mt-1">
-          Your AI Assistant
-        </p>
+      <div className="border-b border-gray-200 dark:border-gray-900 px-6 py-4 sm:px-8 bg-white dark:bg-black flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-black dark:text-white">
+            Chat
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-500 mt-1">
+            Your AI Assistant
+          </p>
+        </div>
+        <Menu isDark={isDark} onThemeToggle={handleThemeToggle} />
       </div>
 
       {/* Messages Container */}
