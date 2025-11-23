@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Turnstile from "react-turnstile";
+import { getSiteKey, verifyCaptchaToken } from "@/lib/turnstile";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -10,6 +12,8 @@ export default function Register() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const captchaRef = useRef<any>(null);
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -58,8 +62,24 @@ export default function Register() {
       return;
     }
 
+    if (!captchaToken) {
+      setError("Please complete the captcha verification");
+      return;
+    }
+
     try {
       setIsLoading(true);
+
+      const captchaVerification = await verifyCaptchaToken(captchaToken);
+      if (!captchaVerification.success) {
+        setError(captchaVerification.error || "Captcha verification failed");
+        if (captchaRef.current) {
+          captchaRef.current.reset();
+        }
+        setCaptchaToken("");
+        return;
+      }
+
       await register(formData.name, formData.email, formData.password);
       navigate("/");
     } catch (err) {
@@ -278,6 +298,27 @@ export default function Register() {
                   {error}
                 </div>
               )}
+
+              {/* Cloudflare Turnstile */}
+              <div
+                className="flex justify-center"
+                style={{
+                  animation: "fadeInUp 0.6s ease-out 0.55s both",
+                }}
+              >
+                <Turnstile
+                  ref={captchaRef}
+                  sitekey={getSiteKey()}
+                  onVerify={(token) => setCaptchaToken(token)}
+                  onError={() => {
+                    setError("Captcha verification failed. Please try again.");
+                    setCaptchaToken("");
+                  }}
+                  onExpire={() => setCaptchaToken("")}
+                  theme="dark"
+                  language="fr"
+                />
+              </div>
 
               {/* Submit Button */}
               <button
