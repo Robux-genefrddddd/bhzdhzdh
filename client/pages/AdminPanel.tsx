@@ -17,7 +17,6 @@ import {
 import { LicensePlan, AdminLicenseCreate, AdminUserAction } from "@shared/api";
 import { LicenseManager } from "@/lib/licenseManager";
 
-const ADMIN_EMAILS = ["founder@example.com", "jo.m.efarit.1.4@gmail.com"];
 
 interface AdminStats {
   totalUsers: number;
@@ -64,18 +63,15 @@ export default function AdminPanel() {
   );
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
+    const adminAuth = sessionStorage.getItem("admin_authenticated");
+    if (adminAuth !== "true") {
+      navigate("/admin-login");
       return;
     }
+  }, [navigate]);
 
-    if (!ADMIN_EMAILS.includes(user.email)) {
-      navigate("/");
-      return;
-    }
-  }, [user, navigate]);
-
-  if (!user || !ADMIN_EMAILS.includes(user.email)) {
+  const adminAuth = sessionStorage.getItem("admin_authenticated");
+  if (adminAuth !== "true") {
     return null;
   }
 
